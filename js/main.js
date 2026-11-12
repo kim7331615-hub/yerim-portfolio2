@@ -119,19 +119,41 @@
     inspect.classList.remove("is-compact");
     inspectContent.replaceChildren(content);
     if (!inspect.open) inspect.showModal();
+    inspectContent.scrollTop = 0;
     window.PortfolioGallery.suspend(true);
     syncScrollLock();
   }
-  function openImage(src, title, websiteUrl, compact = false) {
+  function openImage(src, title, { url, urlLabel = "웹사이트 보기", detail, compact = false } = {}) {
     const figure = document.createElement("figure");
-    const img = document.createElement("img");
-    img.src = src; img.alt = title; img.decoding = "async";
-    figure.append(img);
-    if (websiteUrl && /^https?:\/\//i.test(websiteUrl)) {
+    const sourceUrl = detail?.pdf || url;
+    if (sourceUrl) {
       const link = document.createElement("a");
-      link.href = websiteUrl; link.target = "_blank"; link.rel = "noopener noreferrer";
-      link.className = "retro-button"; link.textContent = "웹사이트 보기 ↗";
-      link.style.marginTop = "20px"; figure.append(link);
+      link.href = sourceUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.className = "retro-button inspect-source";
+      link.textContent = (detail ? "원본 PDF 보기" : urlLabel) + " ↗";
+      figure.append(link);
+    }
+    if (detail) {
+      figure.className = "detail-preview";
+      figure.setAttribute("aria-label", title + " 전체 디자인");
+      const sectionHeight = 2000;
+      const prefix = detail.pdf.replace(/\.pdf$/, "-");
+      for (let top = 0, part = 1; top < detail.height; top += sectionHeight, part += 1) {
+        const image = new Image(1720, Math.min(sectionHeight, detail.height - top) * 2);
+        image.src = prefix + part + ".webp";
+        image.alt = "";
+        image.decoding = "async";
+        image.loading = part === 1 ? "eager" : "lazy";
+        figure.append(image);
+      }
+    } else {
+      const image = document.createElement("img");
+      image.src = src;
+      image.alt = title;
+      image.decoding = "async";
+      figure.append(image);
     }
     showInspect(title, figure, true);
     inspect.classList.toggle("is-compact", compact);
@@ -180,7 +202,9 @@
       }
     }
     const imageButton = event.target.closest("[data-view-image]");
-    if (imageButton) openImage(imageButton.dataset.viewImage, imageButton.dataset.imageTitle || "Profile", null, imageButton.dataset.imageKind === "meme");
+    if (imageButton) openImage(imageButton.dataset.viewImage, imageButton.dataset.imageTitle || "Profile", {
+      compact: imageButton.dataset.imageKind === "meme"
+    });
     const maximize = event.target.closest("[data-dialog-maximize]");
     if (maximize) maximize.setAttribute("aria-pressed", String(maximize.closest("dialog").classList.toggle("is-maximized")));
   });

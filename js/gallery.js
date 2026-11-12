@@ -88,11 +88,12 @@
     img.alt = duplicate ? "" : item.alt || item.title;
     img.draggable = false;
     img.decoding = "async";
-    img.width = key === "banner" ? 1400 : 500;
-    img.height = key === "banner" ? (i === 1 ? 701 : 707) : 750;
+    img.loading = i === 0 && !duplicate ? "eager" : "lazy";
+    img.width = item.width ?? 500;
+    img.height = item.height ?? 750;
     link.append(img);
     const caption = document.createElement("figcaption");
-    caption.className = "sr-only";
+    if (key !== "detail" && key !== "projects") caption.className = "sr-only";
     caption.textContent = item.title + (item.note ? " · " + item.note : "");
     figure.append(link, caption);
     return figure;
@@ -166,7 +167,7 @@
     if (!card) return;
     const item = category().items[Number(card.dataset.index)];
     pauseForInteraction();
-    window.PortfolioUI.openImage(item.image, item.title, item.url);
+    window.PortfolioUI.openImage(item.image, item.title, item);
   });
   $("[data-gallery-close]").addEventListener("click", () => dialog.close());
   dialog.addEventListener("close", () => {

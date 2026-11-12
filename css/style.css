@@ -219,6 +219,8 @@ section[id], article[id], footer[id] { scroll-margin-top: calc(var(--bar-height)
 .gallery-track.is-banner .artwork { width: min(1400px, calc(100vw - 150px), calc((100dvh - 300px) * 1.98)); }
 .gallery-track.is-detail .artwork { width: min(500px, 82vw); }
 .gallery-track.is-detail img { max-height: calc(100dvh - 280px); object-fit: contain; object-position: top; }
+.gallery-track.is-projects .artwork { width: min(580px, 76vw); }
+.gallery-track.is-projects img { aspect-ratio: 4 / 3; max-height: max(120px, calc(100dvh - 315px)); object-fit: contain; }
 .gallery-bottom { display: flex; justify-content: center; align-items: center; gap: 16px; padding: 12px; }
 .gallery-bottom .retro-button { min-height: 38px; padding: 8px 18px; }
 .gallery-dots { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -228,6 +230,9 @@ section[id], article[id], footer[id] { scroll-margin-top: calc(var(--bar-height)
 .empty-state p { margin-top: 16px; color: #555; font-size: 15px; }
 .inspect-modal { width: min(1000px, calc(100vw - 32px)); }
 .inspect-modal.is-image { width: min(1200px, calc(100vw - 32px)); }
+.inspect-source { display: flex; width: fit-content; margin: 0 auto 16px; }
+.detail-preview { width: min(100%, 860px); margin-inline: auto; }
+.detail-preview img { display: block; width: 100%; }
 .inspect-modal .skill-body { padding: 20px; }
 .inspect-modal .skill-body h3 { font-size: 32px; padding: 20px 0; }
 .inspect-modal .skill-summary { font-size: 22px; margin-top: 30px; line-height: 1.5; }
